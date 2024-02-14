@@ -8,6 +8,6 @@ import { Component, Input } from "@angular/core";
 })
 
 export class GameComponent {
-  @Input() numOfCards! : number ;
-  
+  @Input() numOfCards! : number;
+
 }
