@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-
+import { Card } from "../../types/types";
 @Component ({
   selector: 'card',
   standalone: true,
@@ -8,7 +8,7 @@ import { Component, Input } from "@angular/core";
 })
 
 export class CardComponent {
-  @Input() numOfShaped!: number;
-  @Input() shape!: string;
-  @Input() fill!: string;
+  @Input() card!: Card
+  counter = (num: number) => new Array(num);
+  
 }
