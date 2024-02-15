@@ -1,0 +1,7 @@
+<div class="game">
+  <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card">
+    <card
+    [card]="cards[i]"
+    ></card>
+  </div>
+</div>
