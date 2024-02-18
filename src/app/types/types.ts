@@ -1,14 +1,14 @@
-enum SHAPE  {
+export enum SHAPE  {
   DIAMOND = 'diamond',
   OVAL = 'oval',
   SQUIGGLE = 'squiggle'
 }
-enum FILL {
+export enum FILL {
   SOLID = 'solid',
   STRIPED = 'striped',
   OPEN = 'open'
 }
-enum COLOR {
+export enum COLOR {
   BLUE = 'blue',
   RED = 'red',
   GREEN = 'green'
@@ -17,5 +17,6 @@ export interface Card {
   shape: SHAPE,
   numOfShapes: 1|2|3,
   fill: FILL,
-  color: COLOR
+  color: COLOR,
+  imgNumber: number,
 }
