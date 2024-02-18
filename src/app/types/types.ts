@@ -1,6 +1,21 @@
-export type Card = {
-  shape: 'diamond'|'rectangle'|'oval',
+enum SHAPE  {
+  DIAMOND = 'diamond',
+  OVAL = 'oval',
+  SQUIGGLE = 'squiggle'
+}
+enum FILL {
+  SOLID = 'solid',
+  STRIPED = 'striped',
+  OPEN = 'open'
+}
+enum COLOR {
+  BLUE = 'blue',
+  RED = 'red',
+  GREEN = 'green'
+}
+export interface Card {
+  shape: SHAPE,
   numOfShapes: 1|2|3,
-  fill: null|'lines'|'full',
-  color: 'blue'|'red'|'orange'|'green'
+  fill: FILL,
+  color: COLOR
 }
