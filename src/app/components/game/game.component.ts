@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { CardComponent } from "../card/card.component";
-import { cards } from "../../cards.service";
+import { cards, shuffle } from "../../cards.service";
+import { Card } from "../../types/types";
 import { NgFor } from "@angular/common";
 @Component({
   selector: 'game',
@@ -16,7 +17,18 @@ import { NgFor } from "@angular/common";
               align-items: center
               justify-content: center
               overflow: hidden
-              border-radius: 12px`]
+              border-radius: 12px
+          `, 
+          `.game 
+              width: 100%
+              display: flex
+              flex-direction: row
+              flex-wrap: wrap   
+          `,
+          `.highlight
+              border: 2px solid green
+              box-shadow: 2px 2px black
+          `]
 })
 
 export class GameComponent {
@@ -24,7 +36,16 @@ export class GameComponent {
     console.log('cards: ', cards)
   }
   @Input() numOfCards! : number;
-  cards = cards;
-  counter = (num:number) => new Array(num)
+  cards: Card[] = shuffle(cards);
   
+  counter = (num:number) => new Array(num)
+
+  clickCard = (imgNum: number): void => {
+    this.cards = this.cards.map(card => {
+      if (card.imgNumber === imgNum)
+        card.isClicked = !card.isClicked
+      return card;
+    })
+  }
+
 }
