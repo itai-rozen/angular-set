@@ -1,35 +1,46 @@
-import { Card } from "./types/types"
-const configs = {
-  shape: ['diamond', 'oval', 'squiggle'],
-  number: [1,2,3],
-  fill: ['solid', 'striped', 'open'],
-  color: ['red', 'green', 'blue']
+import { Card, COLOR, SHAPE, FILL } from "./types/types"
+
+const deck: number[] = [...new Array(81).keys()]
+
+const getColor = (num: number): Card['color'] => {
+  let chosenColor : Card['color'] = COLOR.BLUE
+  if (num < 27)
+    chosenColor = COLOR.RED
+  if (num > 26 && num < 54)
+    chosenColor = COLOR.GREEN
+  return chosenColor
 }
 
-const getCards = () => {
-  const cards = [];
-  for (let i = 0; i < configs.shape.length; i++) {
-    for (let j = 0; j < configs.number.length; j++) {
-      for (let k = 0; k < configs.fill.length; k++) {
-        for (let l = 0; l < configs.color.length; l++){
-          const card: Card = {
-            shape: configs.shape[i] as  Card['shape'],
-            numOfShapes: configs.number[j] as Card['numOfShapes'],
-            fill: configs.fill[k] as Card['fill'],
-            color: configs.color[l] as Card['color']
-          }
-          cards.push(card)
-        }
-      }
-    }
-  }
-  return cards;
-} 
+const getFill = (num:number): Card['fill'] => {
+  let chosenFill : Card['fill'] = FILL.STRIPED 
+  const newNum = num % 27
+  if (newNum < 9)
+    chosenFill = FILL.OPEN
+  if (newNum > 17)
+    chosenFill = FILL.SOLID
+  return chosenFill
+}
 
-// export const cards: Card[] = getCards().sort(() => 0.5 - Math.random());
-export const cards: Card[] = [{
-  shape:'squiggle' as Card['shape'], 
-  numOfShapes: 3 as Card['numOfShapes'], 
-  fill:'striped' as Card['fill'], 
-  color: 'red' as Card['color']
-}];
+const getShape = (num : number): Card['shape'] => {
+  let chosenShape = SHAPE.OVAL
+  const newNum = num % 9
+  if (newNum < 3)
+    chosenShape = SHAPE.DIAMOND
+  if (newNum > 5)
+    chosenShape = SHAPE.SQUIGGLE
+  return chosenShape
+}   
+
+const getNumberOfShapes = (num: number): Card['numOfShapes'] => {
+  return (num % 3 + 1) as Card['numOfShapes']
+}
+
+export const cards: Card[] = deck.map(imgNum => {
+  return {
+    shape: getShape(imgNum) as Card['shape'], 
+    numOfShapes: getNumberOfShapes(imgNum) as Card['numOfShapes'], 
+    fill:getFill(imgNum) as Card['fill'], 
+    color: getColor(imgNum) as Card['color'],
+    imgNumber: +imgNum
+  }
+})
