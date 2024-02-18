@@ -1,7 +1,9 @@
 <div class="game">
-  <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card">
+  <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card" (click)="clickCard(cards[i].imgNumber)" [class]="cards[i].isClicked  ? 'highlight': ''">
     <card
     [card]="cards[i]"
     ></card>
   </div>
+  <button>SET</button>
+  <button>DONE</button>
 </div>
