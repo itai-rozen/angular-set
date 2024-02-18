@@ -9,13 +9,13 @@ import { NgFor } from "@angular/common";
   imports: [CardComponent, NgFor],
   styles: [`.game-card  
               width: 30%
-              height: 200px
+              height: 150px
               border: 1px solid black
               margin: 1em
               display: flex
-              flex-direction: column
-              align-items: 'center'
-              justify-content: 'center'
+              align-items: center
+              justify-content: center
+              overflow: hidden
               border-radius: 12px`]
 })
 
