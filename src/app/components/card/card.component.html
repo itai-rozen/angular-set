@@ -1,8 +1,3 @@
-<div>
-  @for (shape of counter(card.numOfShapes);track shape;)  {
-    <p  
-    class="{{card.fill && card.fill}} {{card.shape}}" 
-    >
-  </p>
-  }
+<div >
+  <img  [src]="'assets/' + card.imgNumber + '.png'" alt="">
 </div>
