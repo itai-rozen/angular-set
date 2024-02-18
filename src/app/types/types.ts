@@ -19,4 +19,5 @@ export interface Card {
   fill: FILL,
   color: COLOR,
   imgNumber: number,
+  isClicked: boolean
 }

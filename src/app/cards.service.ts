@@ -41,6 +41,17 @@ export const cards: Card[] = deck.map(imgNum => {
     numOfShapes: getNumberOfShapes(imgNum) as Card['numOfShapes'], 
     fill:getFill(imgNum) as Card['fill'], 
     color: getColor(imgNum) as Card['color'],
-    imgNumber: +imgNum
+    imgNumber: +imgNum,
+    isClicked: false
   }
 })
+
+export const shuffle = (arr : Card[]):Card[] => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * i);
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+  return arr
+}
