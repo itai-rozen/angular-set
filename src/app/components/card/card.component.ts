@@ -8,7 +8,5 @@ import { Card } from "../../types/types";
 })
 
 export class CardComponent {
-  @Input() card!: Card
-  counter = (num: number) => new Array(num);
-  
+  @Input() card!: Card  
 }
