@@ -1,10 +1,16 @@
 <div class="game">
-  <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card" (click)="clickCard(cards[i].imgNumber)" [class]="cards[i].isClicked  ? 'highlight': ''">
-    <card
-    [card]="cards[i]"
-    ></card>
+  <div class="cards-container">
+
+    <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card" (click)="onCardClick(cards[i].imgNumber)" [class]="cards[i].isClicked  ? 'highlight': ''">
+      <card
+      [card]="cards[i]"
+      ></card>
+    </div>
   </div>
-  <button (click)="this.isTimeStart = true">SET</button>
-  <button (click)="this.isTimeStart = false">DONE</button>
-  <timer [isTimeStart]="isTimeStart"></timer>
+  <div class="btns-container">
+    <button (click)="onSetClick()">SET</button>
+    <div class="error">{{error}}</div>
+    <button (click)="onDoneClick()">DONE</button>
+  </div>
+  <timer (secsRemainingEvent)="this.secsRemaining = $event;" [secsRemaining]="secsRemaining"></timer>
 </div>
