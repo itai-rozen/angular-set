@@ -42,7 +42,8 @@ export const cards: Card[] = deck.map(imgNum => {
     fill:getFill(imgNum) as Card['fill'], 
     color: getColor(imgNum) as Card['color'],
     imgNumber: +imgNum,
-    isClicked: false
+    isClicked: false,
+    isMatched: false
   }
 })
 
