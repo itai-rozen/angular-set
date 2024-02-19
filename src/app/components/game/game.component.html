@@ -4,6 +4,7 @@
     [card]="cards[i]"
     ></card>
   </div>
-  <button>SET</button>
-  <button>DONE</button>
+  <button (click)="this.isTimeStart = true">SET</button>
+  <button (click)="this.isTimeStart = false">DONE</button>
+  <timer [isTimeStart]="isTimeStart"></timer>
 </div>

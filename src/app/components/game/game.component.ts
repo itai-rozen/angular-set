@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, SimpleChanges } from "@angular/core";
 import { CardComponent } from "../card/card.component";
+import { TimerComponent } from "../timer/timer.component";
 import { cards, shuffle } from "../../cards.service";
 import { Card } from "../../types/types";
 import { NgFor } from "@angular/common";
@@ -7,7 +8,7 @@ import { NgFor } from "@angular/common";
   selector: 'game',
   standalone: true,
   templateUrl: './game.component.html',
-  imports: [CardComponent, NgFor],
+  imports: [CardComponent, NgFor, TimerComponent],
   styles: [`.game-card  
               width: 30%
               height: 150px
@@ -37,7 +38,7 @@ export class GameComponent {
   }
   @Input() numOfCards! : number;
   cards: Card[] = shuffle(cards);
-  
+  isTimeStart = false;
   counter = (num:number) => new Array(num)
 
   clickCard = (imgNum: number): void => {
