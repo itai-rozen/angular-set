@@ -9,27 +9,7 @@ import { NgFor } from "@angular/common";
   standalone: true,
   templateUrl: './game.component.html',
   imports: [CardComponent, NgFor, TimerComponent],
-  styles: [`.game-card  
-              width: 30%
-              height: 150px
-              border: 1px solid black
-              margin: 1em
-              display: flex
-              align-items: center
-              justify-content: center
-              overflow: hidden
-              border-radius: 12px
-          `, 
-          `.game 
-              width: 100%
-              display: flex
-              flex-direction: row
-              flex-wrap: wrap   
-          `,
-          `.highlight
-              border: 2px solid green
-              box-shadow: 2px 2px black
-          `]
+  styleUrl: './game.component.sass'
 })
 
 export class GameComponent {
@@ -37,16 +17,78 @@ export class GameComponent {
     console.log('cards: ', cards)
   }
   @Input() numOfCards! : number;
-  cards: Card[] = shuffle(cards);
-  isTimeStart = false;
-  counter = (num:number) => new Array(num)
 
-  clickCard = (imgNum: number): void => {
+  cards: Card[] = shuffle(cards);
+  secsRemaining: number = 0
+  isSetClicked: boolean = false
+  error: string = ''
+
+  counter = (num:number) => new Array(num)
+  setError = (msg: string) => {
+    this.error = msg
+    setTimeout(() => {      
+        this.error = ''
+    }, 2000)
+  } 
+
+  onCardClick = (imgNum: number): void => {
     this.cards = this.cards.map(card => {
       if (card.imgNumber === imgNum)
         card.isClicked = !card.isClicked
       return card;
     })
   }
+  onSetClick = ():void => {
+    this.secsRemaining = 5
+    this.isSetClicked = true
+  }
+  onDoneClick = ():void => {
+    this.secsRemaining = 0
+    this.isSetClicked = false
+    const isSuccess: boolean = this.checkSet()
+    this.setError(isSuccess ? 'You found a SET!' : 'This is not a valid set!')
+  }
 
+  checkSet = ():boolean => {
+    const clickedCards = this.cards.filter(card => card.isClicked)
+    console.log('clicked cards: ', clickedCards)
+    if (clickedCards.length < 3) {
+      this.setError('you need to pick at least 3 cards!')
+      return false;
+    }
+    const shapes: string[] = []
+    const shapeQtt: number[] = []
+    const fills: string[] = []
+    const colors: string[] = []
+    clickedCards.forEach(card => {
+      shapes.push(card.shape)
+      shapeQtt.push(card.numOfShapes)
+      fills.push(card.fill)
+      colors.push(card.color)
+    })
+
+    const results = []
+    results.push(this.allSameOrUnique(shapes))
+    results.push(this.allSameOrUnique(shapeQtt))
+    results.push(this.allSameOrUnique(fills))
+    results.push(this.allSameOrUnique(colors))
+    console.log('results: ', results)
+    setTimeout(this.clearClicked, 2000)
+    if (results.includes(false))
+      return false
+    return true;
+  }
+
+  allSameOrUnique = (arr: number[]|string[]):string|boolean => {
+    const uniqueArr = [...new Set(arr as Iterable<any>)]
+    return (uniqueArr.length === arr.length || uniqueArr.length === 1)
+  }
+
+  clearClicked = () => {
+    this.cards = this.cards.map(card => {
+      if (card.isClicked)
+        card.isClicked = false;
+      return card
+    })
+  }
 }
