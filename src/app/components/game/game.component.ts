@@ -38,24 +38,31 @@ export class GameComponent {
       return card;
     })
   }
+
   onSetClick = ():void => {
     this.secsRemaining = 5
     this.isSetClicked = true
   }
+
   onDoneClick = ():void => {
     this.secsRemaining = 0
     this.isSetClicked = false
-    const isSuccess: boolean = this.checkSet()
+    const clickedCards = this.cards.filter(card => card.isClicked)
+    if (clickedCards.length !== 3) {
+      this.setError('you need to pick exactly 3 ca  rds!')
+      return;
+    }
+    const isSuccess: boolean = this.checkSet(clickedCards)
     this.setError(isSuccess ? 'You found a SET!' : 'This is not a valid set!')
+    if (isSuccess)
+      setTimeout(this.dealCards, 2000)   
+    }
+
+  dealCards = () => {
+    this.cards = this.cards.filter(card => !card.isMatched)
   }
 
-  checkSet = ():boolean => {
-    const clickedCards = this.cards.filter(card => card.isClicked)
-    console.log('clicked cards: ', clickedCards)
-    if (clickedCards.length < 3) {
-      this.setError('you need to pick at least 3 cards!')
-      return false;
-    }
+  checkSet = (clickedCards: Card[]):boolean => {
     const shapes: string[] = []
     const shapeQtt: number[] = []
     const fills: string[] = []
@@ -76,6 +83,13 @@ export class GameComponent {
     setTimeout(this.clearClicked, 2000)
     if (results.includes(false))
       return false
+
+    const imgNumbers: number[] = clickedCards.map(card => card.imgNumber)
+    this.cards = this.cards.map(card => {
+      if (imgNumbers.includes(card.imgNumber))
+        card.isMatched = true
+      return card
+    })
     return true;
   }
 
