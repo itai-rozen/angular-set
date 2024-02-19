@@ -1,5 +1,5 @@
-<div class="timer">
-  <p>is time start? {{isTimeStart}} </p>
-  <h2>TIME!</h2>
-  {{interval}}
+<div class="timer-container">
+  <div class="timer">
+    00:{{secsRemaining > 9 ? secsRemaining : '0'+secsRemaining }}
+  </div>
 </div>

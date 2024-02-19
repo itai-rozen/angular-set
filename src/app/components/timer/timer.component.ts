@@ -1,34 +1,46 @@
-import { Component, Input, OnChanges, SimpleChanges} from "@angular/core";
+import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter} from "@angular/core";
 
 @Component ({
   standalone: true,
   selector: 'timer',
-  templateUrl: './timer.component.html'
+  templateUrl: './timer.component.html',
+  styles: [`
+  .timer-container
+    display: block
+    width: 100%
+    display: flex
+    justify-content: center
+    align-items: center
+  `, `
+  .timer 
+    border: 2px solid black
+    border-radius: 10px
+    padding: 1em
+    margin: 1em
+  `]
 })
 
 export class TimerComponent implements OnChanges {
-  constructor(){
-    console.log('hello from timer constructor')
-  }
-  @Input() isTimeStart: boolean = false
-  interval: number|null = null
+  @Input() secsRemaining: number = 0
+  @Output() secsRemainingEvent = new EventEmitter<number>
+
   intervalId: null|ReturnType<typeof setInterval> = null;
   startTimer() {
-    this.intervalId =  setInterval(() => {
-      this.interval = this.interval ? this.interval+1 : 1 
+    this.intervalId =  setTimeout(() => {
+      this.secsRemainingEvent.emit(this.secsRemaining-1)
     },1000)
   }
   stopTimer = () => {
     if (this.intervalId)
       clearInterval(this.intervalId!)
-    this.interval = null
+
   } 
 
   ngOnChanges(changes: SimpleChanges) {
-    const { isTimeStart } = changes
-    console.log('is time start: ', isTimeStart)
-    if (isTimeStart.currentValue) 
+    const { secsRemaining } = changes
+    if (secsRemaining.currentValue > 0) {
       this.startTimer()
+    }
     else
       this.stopTimer()
   }
