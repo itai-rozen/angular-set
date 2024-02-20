@@ -8,6 +8,11 @@ const io = require('socket.io')(httpServer, {
 
 io.on('connection', (socket) => {
   console.log('user connected!')
+
+  socket.on('joinGame', ((gameId) => {
+    socket.join(gameId)
+    socket.to(gameId).emit('joinGame', 'a player joined the game!')
+  }))
 })
 const PORT = 3000
 httpServer.listen(PORT, () => console.log('server listens on port: ', PORT))
