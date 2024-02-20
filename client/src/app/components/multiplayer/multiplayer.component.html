@@ -1,1 +1,10 @@
-<p>multiplayer works!</p>
+<div class="multiplayer-container">
+  <h2>multiplayer</h2>
+  @if (!gameId) {
+    <button (click)="onCreateGame()">Create Game</button>
+  } @else {
+    <div class="2p-game">
+      <h2>2 player game over HEERRREEE</h2>
+    </div>
+  }
+</div>
