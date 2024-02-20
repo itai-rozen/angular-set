@@ -16,12 +16,12 @@ export class GameComponent {
   ngOnInit() {
     console.log('cards: ', cards)
   }
-  @Input() numOfCards! : number;
-
+  numOfCards : number = 12;
   cards: Card[] = shuffle(cards);
   secsRemaining: number = 0
   isSetClicked: boolean = false
   error: string = ''
+  score: number = 0
 
   counter = (num:number) => new Array(num)
   setError = (msg: string) => {
@@ -54,8 +54,10 @@ export class GameComponent {
     }
     const isSuccess: boolean = this.checkSet(clickedCards)
     this.setError(isSuccess ? 'You found a SET!' : 'This is not a valid set!')
-    if (isSuccess)
+    if (isSuccess) {
+      this.score++
       setTimeout(this.dealCards, 2000)   
+    }
     }
 
   dealCards = () => {

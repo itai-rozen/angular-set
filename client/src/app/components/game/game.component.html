@@ -1,6 +1,6 @@
 <div class="game">
+  <h2 class="score">Sets Found: {{score}}</h2>
   <div class="cards-container">
-
     <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card" (click)="onCardClick(cards[i].imgNumber)" [class]="cards[i].isClicked  ? 'highlight': ''">
       @if (!cards[i].isMatched) {
         <card
