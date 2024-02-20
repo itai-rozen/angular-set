@@ -8,5 +8,5 @@ export const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'game', component: GameComponent},
   {path: 'instructions', component: InstructionsComponent},
-  {path: 'multiplayer', component: MultiplayerComponent},
+  {path: 'multiplayer/:gameId', component: MultiplayerComponent},
 ];
