@@ -22,3 +22,5 @@ export interface Card {
   isClicked: boolean,
   isMatched: boolean
 }
+
+export type Room = [string, string]
