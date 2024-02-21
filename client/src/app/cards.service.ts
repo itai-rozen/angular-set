@@ -35,17 +35,23 @@ const getNumberOfShapes = (num: number): Card['numOfShapes'] => {
   return (num % 3 + 1) as Card['numOfShapes']
 }
 
-export const cards: Card[] = deck.map(imgNum => {
-  return {
-    shape: getShape(imgNum) as Card['shape'], 
-    numOfShapes: getNumberOfShapes(imgNum) as Card['numOfShapes'], 
-    fill:getFill(imgNum) as Card['fill'], 
-    color: getColor(imgNum) as Card['color'],
-    imgNumber: +imgNum,
-    isClicked: false,
-    isMatched: false
-  }
-})
+
+
+export const getCardsFromImgNumbers = (imgNums : number[]) => {
+  return imgNums.map(imgNum => {
+    return {
+      shape: getShape(imgNum) as Card['shape'], 
+      numOfShapes: getNumberOfShapes(imgNum) as Card['numOfShapes'], 
+      fill: getFill(imgNum) as Card['fill'], 
+      color: getColor(imgNum) as Card['color'],
+      imgNumber: +imgNum,
+      isClicked: false,
+      isMatched: false
+    }
+  })
+} 
+
+export const cards: Card[] = getCardsFromImgNumbers(deck)
 
 export const shuffle = (arr : Card[]):Card[] => {
   for (let i = arr.length - 1; i > 0; i--) {
