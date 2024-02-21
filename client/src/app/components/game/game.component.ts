@@ -4,6 +4,7 @@ import { TimerComponent } from "../timer/timer.component";
 import { cards, shuffle } from "../../cards.service";
 import { Card } from "../../types/types";
 import { NgFor } from "@angular/common";
+import { Router } from "@angular/router";
 @Component({
   selector: 'game',
   standalone: true,
@@ -13,11 +14,15 @@ import { NgFor } from "@angular/common";
 })
 
 export class GameComponent {
+  constructor(
+    private router : Router
+  ){}
   ngOnInit() {
     console.log('cards: ', cards)
   }
+  @Input() mpCards ?: Card[]
   numOfCards : number = 12;
-  cards: Card[] = shuffle(cards);
+  cards: Card[] = this.mpCards || shuffle(cards);
   secsRemaining: number = 0
   isSetClicked: boolean = false
   error: string = ''
@@ -107,4 +112,6 @@ export class GameComponent {
       return card
     })
   }
+  
+  onLeaveGame = () => this.router.navigate([''])
 }
