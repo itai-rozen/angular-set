@@ -17,18 +17,28 @@ export class GameComponent {
   constructor(
     private router : Router
   ){}
-  ngOnInit() {
-    console.log('cards: ', cards)
-  }
+
   @Input() mpCards ?: Card[]
   numOfCards : number = 12;
-  cards: Card[] = this.mpCards || shuffle(cards);
+  gameCards: Card[] = this.mpCards ? this.mpCards : shuffle(cards);
   secsRemaining: number = 0
   isSetClicked: boolean = false
   error: string = ''
   score: number = 0
 
+  ngOnInit() {
+    console.log('mp-cards @game component.ngOninit(): ', this.mpCards)
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('changes \n ******************** \n\n', changes )
+    if (changes['mpCards']) {
+      this.gameCards = changes['mpCards'].currentValue
+    }
+  }
+
   counter = (num:number) => new Array(num)
+
   setError = (msg: string) => {
     this.error = msg
     setTimeout(() => {      
@@ -37,7 +47,7 @@ export class GameComponent {
   } 
 
   onCardClick = (imgNum: number): void => {
-    this.cards = this.cards.map(card => {
+    this.gameCards = this.gameCards.map(card => {
       if (card.imgNumber === imgNum)
         card.isClicked = !card.isClicked
       return card;
@@ -52,9 +62,9 @@ export class GameComponent {
   onDoneClick = ():void => {
     this.secsRemaining = 0
     this.isSetClicked = false
-    const clickedCards = this.cards.filter(card => card.isClicked)
+    const clickedCards = this.gameCards.filter(card => card.isClicked)
     if (clickedCards.length !== 3) {
-      this.setError('you need to pick exactly 3 ca  rds!')
+      this.setError('you need to pick exactly 3 cards!')
       return;
     }
     const isSuccess: boolean = this.checkSet(clickedCards)
@@ -66,7 +76,7 @@ export class GameComponent {
     }
 
   dealCards = () => {
-    this.cards = this.cards.filter(card => !card.isMatched)
+    this.gameCards = this.gameCards.filter(card => !card.isMatched)
   }
 
   checkSet = (clickedCards: Card[]):boolean => {
@@ -92,7 +102,7 @@ export class GameComponent {
       return false
 
     const imgNumbers: number[] = clickedCards.map(card => card.imgNumber)
-    this.cards = this.cards.map(card => {
+    this.gameCards = this.gameCards.map(card => {
       if (imgNumbers.includes(card.imgNumber))
         card.isMatched = true
       return card
@@ -106,7 +116,7 @@ export class GameComponent {
   }
 
   clearClicked = () => {
-    this.cards = this.cards.map(card => {
+    this.gameCards = this.gameCards.map(card => {
       if (card.isClicked)
         card.isClicked = false;
       return card
