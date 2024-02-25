@@ -123,5 +123,5 @@ export class GameComponent {
     })
   }
   
-  onLeaveGame = () => this.router.navigate([''])
+  onLeaveGame = () => this.router.navigate(['/multiplayer'])
 }
