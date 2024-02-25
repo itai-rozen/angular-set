@@ -1,16 +1,25 @@
 <div class="multiplayer-container">
   <h2>multiplayer</h2>
+  <button (click)="onLeaveGame()">leave</button>
   @if (!gameId) {
     <h3>Available rooms</h3>
 
-    @if (rooms.length) {
-      <div *ngFor="let room of rooms" class="room">
-        <h2>Name: {{room[0]}}</h2>
-        <h3>Active players: {{room[1]}}</h3>
-        <button (click)="onJoinGame(room[0])">Join room</button>
-      </div>
+    @if (!isEmptyObject(rooms)) {
+      @for (room of rooms|keyvalue; track rooms[gameId];) {
+        <div class="room">
+          <h2>Name: {{room.key}}</h2>
+          <h3>Active players: {{room.value.activePlayers}}</h3>
+          <button (click)="onJoinGame(room.key)">Join room</button>
+        </div>
+      }
     } @else {
       <p>No available Rooms</p>
+    }
+  } @else { <!-- if game id exist -->
+    @if (rooms[gameId]?.cards?.length) {
+      <game [mpCards]="rooms[gameId].cards"></game>
+    } @else {
+      <button (click)="onStartGame(gameId)">Start Game</button>
     }
   }
 
