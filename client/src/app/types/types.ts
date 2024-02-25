@@ -23,16 +23,16 @@ export interface Card {
   isMatched: boolean
 }
 //TODO switch to single type (Room[])
-export type Rooms = {
+export type RoomsObjType = {
   [key: string] : {
     activePlayers: { [key: string]: string }, 
     cards: Card[]
   }
 }
 
-export type Player = {
-  _id: string,
-  sets: number,
-  gameId: string,
-  name?: string
+export type PlayersObjType = {
+    _id: string,
+    sets: number,
+    gameId: string,
+    name?: string
 }
