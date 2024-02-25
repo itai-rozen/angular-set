@@ -29,3 +29,10 @@ export type Rooms = {
     cards: Card[]
   }
 }
+
+export type Player = {
+  _id: string,
+  sets: number,
+  gameId: string,
+  name?: string
+}
