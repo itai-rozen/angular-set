@@ -7,38 +7,44 @@ const io = require('socket.io')(httpServer, {
 const { createGame } = require('./cards')
 
 const rooms = {}
+
 io.on('connection', (socket) => {
   console.log('user connected!')
 
   socket.on('joinGame', ((gameId) => {
-    rooms[gameId.gameId] = (rooms[gameId.gameId]) ? rooms[gameId.gameId] + 1 : 1
+    if (rooms[gameId.gameId])
+      rooms[gameId.gameId].activePlayers++
     socket.join(gameId)
     socket.to(gameId).emit('joinGame', 'a player joined the game!')
-    console.log('active players: ', rooms)
+    // console.log('active players: ', rooms)
   }))
 
   socket.on('leaveGame', ((gameId) => {
-    rooms[gameId.gameId] = (rooms[gameId.gameId]) ? rooms[gameId.gameId] - 1 : 0
-    if (!rooms[gameId.gameId])
+    if (rooms[gameId.gameId])
+      rooms[gameId.gameId].activePlayers--
+    if (!rooms[gameId.gameId]?.activePlayers)
       delete rooms[gameId.gameId]
     socket.to(gameId).emit('leaveGame', 'a player left the game!')
-    console.log('active players: ', rooms)
+    // console.log('active players: ', rooms)
   }))
 
-  socket.on('startGame', (async ({gameId}) => {
-    const imgNums = await createGame();
-    io.to(gameId).emit('startGame', imgNums)
+  socket.on('startGame', (({gameId, cards}) => {
+    rooms[gameId].cards = cards
+    io.emit('startGame', rooms)
   }))
 
   socket.on('getRooms', () => {
     console.log('getting rooms! ', rooms)
-    io.emit('getRooms', Object.entries(rooms))
+    io.emit('getRooms', rooms)
   })
 
   socket.on('createRoom', (gameId) => {
-    rooms[gameId] = 0
+    rooms[gameId] = {
+      activePlayers: 0,
+      cards: []
+    }
     console.log('new room! \n', gameId)
-    io.emit('getRooms', Object.entries(rooms)) 
+    io.emit('getRooms', rooms) 
   })
 
 
