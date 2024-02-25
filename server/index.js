@@ -11,19 +11,30 @@ const rooms = {}
 io.on('connection', (socket) => {
   console.log('user connected!')
 
-  socket.on('joinGame', ((gameId) => {
-    if (rooms[gameId.gameId])
-      rooms[gameId.gameId].activePlayers++
+  socket.on('joinGame', ((gameId, playerId) => {
+    const gameObj = rooms[gameId.gameId] || null
+    const playerObj = gameObj?.activePlayers[playerId] || null
+
+    if (gameObj && !playerObj) {
+        gameObj.activePlayers[playerId] = {
+      _id: playerId,
+      sets: 0,
+      gameId: gameId,
+      name: ''
+      }
+    }
     socket.join(gameId)
     socket.to(gameId).emit('joinGame', 'a player joined the game!')
     // console.log('active players: ', rooms)
   }))
 
-  socket.on('leaveGame', ((gameId) => {
-    if (rooms[gameId.gameId])
-      rooms[gameId.gameId].activePlayers--
-    if (!rooms[gameId.gameId]?.activePlayers)
-      delete rooms[gameId.gameId]
+  socket.on('leaveGame', ((gameId, playerId) => {
+    const gameObj = rooms[gameId.gameId] || null
+    const playerObj = gameObj?.activePlayers[playerId] || null
+    if (gameObj && playerObj)
+      delete playerObj
+    if ( Object.keys(rooms[gameId.gameId]?.activePlayers).length === 0 ) // activeplayers prop is empty object = all players left the game
+      delete gameObj
     socket.to(gameId).emit('leaveGame', 'a player left the game!')
     // console.log('active players: ', rooms)
   }))
@@ -40,7 +51,7 @@ io.on('connection', (socket) => {
 
   socket.on('createRoom', (gameId) => {
     rooms[gameId] = {
-      activePlayers: 0,
+      activePlayers: {},
       cards: []
     }
     console.log('new room! \n', gameId)
