@@ -2,15 +2,17 @@
   <h2 class="score">Sets Found: {{score}}</h2>
   <button (click)="onLeaveGame()">Leave</button>
   <div class="cards-container">
-    <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card" (click)="onCardClick(cards[i].imgNumber)" [class]="cards[i].isClicked  ? 'highlight': ''">
-      @if (!cards[i].isMatched) {
+    @if (gameCards) {
+    <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card" (click)="onCardClick(gameCards[i].imgNumber)" [class]="gameCards[i]?.isClicked  ? 'highlight': ''">
+      @if (!gameCards[i]?.isMatched) {
         <card
-        [card]="cards[i]"
+        [card]="gameCards[i]"
         ></card>
       } @else {
         <p></p>
       }
     </div>
+    }
   </div>
   <div class="btns-container">
     <button (click)="onSetClick()">SET</button>
