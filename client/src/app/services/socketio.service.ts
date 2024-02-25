@@ -12,9 +12,9 @@ export class SocketioService {
     this.socket = io('http://localhost:3000')
   }
 
-  joinGame(gameId: string) {
-    console.log('sService - join game')
-    this.socket.emit('joinGame', { gameId })
+  joinGame(gameId: string, playerId: string) {
+    console.log('socket - join game \n Player ID: ', playerId)
+    this.socket.emit('joinGame', { gameId, playerId })
   }
 
   startGame(gameId: string, cards: Card[]) {
@@ -22,8 +22,10 @@ export class SocketioService {
     this.socket.emit('startGame', { gameId, cards });
   }
 
-  leaveGame(gameId: string) {
-    this.socket.emit('leaveGame', { gameId })
+  leaveGame(gameId: string, playerId: string) {
+    console.log('socket - leave game \n Player ID: ', playerId)
+    console.log('socket - leave game \n Game ID: ', gameId)
+    this.socket.emit('leaveGame', { gameId, playerId })
   }
 
   createRoom(gameId: string) {

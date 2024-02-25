@@ -2,7 +2,7 @@ import { Component, SimpleChanges } from '@angular/core';
 import { SocketioService } from '../../services/socketio.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { cards, shuffle } from '../../cards.service';
-import { Card, Rooms } from '../../types/types';
+import { Card, PlayersObjType, RoomsObjType } from '../../types/types';
 import { GameComponent } from '../game/game.component';
 import { CommonModule } from '@angular/common';
 @Component({
@@ -20,7 +20,7 @@ export class MultiplayerComponent {
   ){}
 
   gameId: string = this.route.snapshot.paramMap.get('gameId') ?? ''
-  rooms: Rooms = {}
+  rooms: RoomsObjType= {}
 
   ngOnInit() {
     console.log('game id: ', this.gameId)
@@ -28,27 +28,27 @@ export class MultiplayerComponent {
     if (!localStorage['active-player'])
       localStorage['active-player'] = crypto.randomUUID()
     if (this.gameId)
-      this.socketIoService.joinGame(this.gameId)
+      this.socketIoService.joinGame(this.gameId, localStorage['active-player'])
     this.receiveRooms(true)
 
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() { 
+    console.log('left!! active player deleted from localstorage')
+    this.socketIoService.leaveGame(this.gameId, localStorage['active-player'])
     delete localStorage['active-player']
-    console.log('left!!')
-    this.socketIoService.leaveGame(this.gameId)
   }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('changes mPlayer cpt: ', changes)
   }
-  onJoinGame = (gameId: string)  => this.router.navigate(['/multiplayer', gameId])
+  onJoinGame = (gameId: string|unknown)  => this.router.navigate(['/multiplayer', gameId])
   
   onLeaveGame = () => this.router.navigate([''])
 
   onStartGame = (gameId: string) => {
     console.log('cards @onstartgame: ', cards)
-    this.socketIoService.startGame(gameId, shuffle(cards))
+    this.socketIoService.startGame(gameId, cards)
     this.receiveStartGame()
   } 
 
@@ -56,14 +56,14 @@ export class MultiplayerComponent {
     console.log('receive rooms!')
     this.socketIoService.receiveRooms(first).subscribe((rooms) => {
       console.log('rooms from server: ', rooms)
-      this.rooms = rooms as Rooms;
+      this.rooms = rooms as RoomsObjType;
       console.log('rooms @mPlayer.receiveRooms(): ', this.rooms)
     })
   }
 
   receiveStartGame = () => {
     this.socketIoService.receiveStartGame().subscribe((rooms) => {
-      this.rooms = rooms as Rooms
+      this.rooms = rooms as RoomsObjType
     })
   }
 
@@ -76,5 +76,10 @@ export class MultiplayerComponent {
 
   isEmptyObject = (obj: {}) => {
     return Object.keys(obj).length === 0
+  }
+
+  getNumOfPlayers = (playersObj: any) => {
+    console.log('players object @getNumOfPlayers(): ', playersObj)
+    return Object.keys(playersObj.activePlayers)?.length
   }
 }
