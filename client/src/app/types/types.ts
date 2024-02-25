@@ -22,5 +22,10 @@ export interface Card {
   isClicked: boolean,
   isMatched: boolean
 }
-
-export type Room = [string, string]
+//TODO switch to single type (Room[])
+export type Rooms = {
+  [key: string] : {
+    activePlayers: { [key: string]: string }, 
+    cards: Card[]
+  }
+}
