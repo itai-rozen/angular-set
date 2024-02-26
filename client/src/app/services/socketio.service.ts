@@ -33,6 +33,14 @@ export class SocketioService {
     this.socket.emit('createRoom', gameId)
   }
 
+  updatePlayer(gameId: string, playerId: string, playerProp: string, playerValue: string|boolean|undefined) {
+    this.socket.emit('updatePlayer', { gameId, playerId, playerProp, playerValue})
+  }
+
+  updateCards(gameId: string, cards: Card[]) {
+    this.socket.emit('updateCards', { gameId, cards })
+  }
+
   receiveRooms(first = false) {
     if (first)
       this.socket.emit('getRooms')
@@ -54,5 +62,20 @@ export class SocketioService {
         }
       })
     })
+  }
+
+  receiveGame(gameId: string, first: boolean = false) {
+    // return this.socket.emit('getGame', {gameId})
+    if (first) {
+      this.socket.emit('getGame', {gameId})
+    }
+    return new Observable(((observer) => {
+        this.socket.on('getGame', (game) => {
+        if (game) {
+          console.log('recreve game!')
+          observer.next(game)
+        }
+      })
+    }))
   }
 }
