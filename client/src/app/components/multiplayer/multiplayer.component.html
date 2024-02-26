@@ -17,7 +17,7 @@
     }
   } @else { <!-- if game id exist -->
     @if (rooms[gameId]?.cards?.length) {
-      <game [mpCards]="rooms[gameId].cards"></game>
+      <game [game]="rooms[gameId]"></game>
     } @else {
       <button (click)="onStartGame(gameId)">Start Game</button>
     }
