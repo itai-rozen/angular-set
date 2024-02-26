@@ -1,0 +1,14 @@
+<div class="game-container">
+  @if(gameId) {
+    @if (game.cards?.length) {
+      <game [game]="game"></game>
+    } @else {
+      <div>
+        <button (click)="onStartGame()">Start Game</button>
+        <button (click)="onLeaveGame()">Leave</button>
+      </div>
+    }
+  } @else {
+    <h2>No Game ID</h2>
+  }
+</div>
