@@ -24,10 +24,12 @@ export interface Card {
 }
 //TODO switch to single type (Room[])
 export type RoomsObjType = {
-  [key: string] : {
-    activePlayers: { [key: string]: string }, 
-    cards: Card[]
-  }
+  [key: string] : GameObjType 
+}
+export type GameObjType = {
+  activePlayers: { [key: string]: string }, 
+  cards: Card[],
+  id: string
 }
 
 export type PlayersObjType = {
