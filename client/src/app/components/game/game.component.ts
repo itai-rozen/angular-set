@@ -5,6 +5,8 @@ import { cards, shuffle } from "../../cards.service";
 import { Card, PlayersObjType, RoomsObjType } from "../../types/types";
 import { NgFor } from "@angular/common";
 import { Router } from "@angular/router";
+import { SocketioService } from "../../services/socketio.service";
+import { navigateTo } from "../../services/utils.service";
 @Component({
     selector: 'game',
     standalone: true,
@@ -15,17 +17,17 @@ import { Router } from "@angular/router";
 
 export class GameComponent {
     constructor(
-        private router: Router
+        private router: Router,
+        private socketService: SocketioService
     ) { }
 
     // @Input() mpCards?: Card[]
     @Input() game?: any
 
-    isMultiplayer: boolean = !!this.game
+    isMultiplayer: boolean = false
     mpCards: Card[] =  this.isMultiplayer ? this.game.cards : undefined
     activePlayerId: string = ''
-    activePlayer: PlayersObjType = (this.activePlayerId) ? this.game.activePlayers[this.activePlayerId] : undefined
-    
+    navigateTo: Function = navigateTo
     numOfCards: number = 12;
     gameCards: Card[] = this.mpCards || shuffle(cards);
     secsRemaining: number = 0
@@ -34,13 +36,18 @@ export class GameComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         console.log('changes \n ******************** \n\n', changes)
-        if (changes['mpCards'])
-            this.gameCards = changes['mpCards'].currentValue
+        if (changes['game']) {
+            this.isMultiplayer = true
+            this.gameCards = changes['game'].currentValue.cards
+        }
+        console.log('game cards: ', this.gameCards)
     }
 
     ngOnInit() {
         // console.log('mp-cards @game component.ngOninit(): ', )
         console.log('the game: ', this.game)
+        console.log('multiplayer? ', this.isMultiplayer)
+
     }
 
 
@@ -54,20 +61,40 @@ export class GameComponent {
     }
 
     onCardClick = (imgNum: number): void => {
+        if (this.isMultiplayer) {
+            console.log('this game: ', this.game)
+            if (!this.activePlayerId)
+                return
+            console.log('player: ', this.game.activePlayers[this.activePlayerId])
+            if (!this.game.activePlayers[this.activePlayerId].isClickedSet)
+                return
+            if (!this.secsRemaining)
+                return
+        }
+
         this.gameCards = this.gameCards.map(card => {
             if (card.imgNumber === imgNum)
-                card.isClicked = !card.isClicked
-            return card;
+            card.isClicked = !card.isClicked
+          return card;
         })
+        if (this.isMultiplayer) {
+          this.socketService.updateCards(this.game.id, this.gameCards)
+          this.receiveGame(this.game.id)
+        }
     }
 
     onSetClick = (): void => {
         this.secsRemaining = 5
         if (this.isMultiplayer) {
             this.activePlayerId = localStorage['active-player']
+
             console.log('who clicked? ', this.activePlayerId)
-            this.game.activePlayers[this.activePlayerId].isClickedSet = true
+            this.socketService.updatePlayer(this.game.id, this.activePlayerId, 'isClickedSet', true)
+            // this.game.activePlayers[this.activePlayerId].isClickedSet = true
+            this.receiveGame(this.game.id);
         }
+
+
         // this.isSetClicked = true
     }
 
@@ -76,8 +103,11 @@ export class GameComponent {
         // this.isSetClicked = false
         if (this.isMultiplayer) {
             console.log('clicked done!')
-            if (this.activePlayerId)
-                this.game.activePlayers[this.activePlayerId].isClickedSet = false
+            if (!this.activePlayerId) {
+                console.log('error: no active playeer id')
+                return
+            }
+            this.socketService.updatePlayer(this.game.id, this.activePlayerId, 'isClickedSet', false)
             this.activePlayerId = ''
         }
         const clickedCards = this.gameCards.filter(card => card.isClicked)
@@ -141,6 +171,37 @@ export class GameComponent {
         })
     }
     //TODO merge with other onLeaveGame func for one util general func
-    onLeaveGame = () => this.router.navigate([''])
+    onLeaveGame = () => {
+      let path = ''
+      if (this.isMultiplayer) {
+        this.isMultiplayer = false
+        path = '/lobby'
+      }
+      this.navigateTo(path)
+    } 
+
+    isSetDisabled = ():boolean => {
+        let disabled = false
+        if (this.isMultiplayer && this.activePlayerId) {
+            for (let player in this.game.activePlayers) {
+                const playerObj = this.game.activePlayers[player]
+                if (playerObj._id !== this.activePlayerId && playerObj.isClickedSet) {
+                    console.log('player id: ', playerObj._id)
+                    console.log('active layer id: ', this.activePlayerId)
+                    console.log('someone else clicked!')
+                    disabled = true
+                }
+            }
+        }
+        return disabled
+    }
+
+    receiveGame(gameId: string) {
+        console.log('recieve game!')
+        this.socketService.receiveGame(gameId, true).subscribe((newGame) => {
+          console.log('new game: ', newGame)
+          this.game = newGame
+        })
+      }
 
 }
