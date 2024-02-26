@@ -1,5 +1,6 @@
 <div class="game">
   <h2 class="score">Sets Found: {{score}}</h2>
+  <h3>player id: {{activePlayerId}}</h3>
   <button (click)="onLeaveGame()">Leave</button>
   <div class="cards-container">
     @if (gameCards) {
@@ -15,7 +16,7 @@
     }
   </div>
   <div class="btns-container">
-    <button (click)="onSetClick()">SET</button>
+    <button [disabled]="secsRemaining > 0" (click)="onSetClick()">SET</button>
     <button [disabled]="numOfCards > 12">Add 3 cards</button>
     <button (click)="onDoneClick()">DONE</button>
   </div>
