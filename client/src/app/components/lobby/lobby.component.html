@@ -1,0 +1,21 @@
+<div class="lobby-container">
+  <h2>Lobby</h2>
+  <button (click)="onLeaveLobby()">Leave Lobby</button>
+    <h3>Available rooms</h3>
+
+    @if (rooms && !isEmptyObject(rooms)) {
+      @for (room of rooms|keyvalue; track rooms[room.key];) {
+        <div class="room">
+          <h2>Name: {{room.key}}</h2>
+          <h3>Active players: {{getNumOfPlayers(room.value.activePlayers) }}</h3>
+          <button (click)="onJoinRoom(room.key)">Join room</button>
+        </div>
+      }
+    } @else {
+      <p>No available Rooms</p>
+    }
+
+
+  <button (click)="onCreateRoom()">Create Room</button>
+
+</div>
