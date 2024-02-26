@@ -26,6 +26,8 @@ io.on('connection', (socket) => {
       _id: playerId,
       sets: 0,
       gameId: gameId,
+      isStartGame: false,
+      isClickedSet: false,
       name: ''
       }
     }
@@ -60,7 +62,7 @@ io.on('connection', (socket) => {
   }))
 
   socket.on('getRooms', () => {
-    console.log('getting rooms! ', rooms)
+    console.log('getting rooms! ')
     io.emit('getRooms', rooms)
   })
 

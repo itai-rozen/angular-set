@@ -34,5 +34,7 @@ export type PlayersObjType = {
     _id: string,
     sets: number,
     gameId: string,
+    isStartGame: boolean,
+    isClickedSet: boolean,
     name?: string
 }
