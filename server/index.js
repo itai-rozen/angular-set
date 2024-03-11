@@ -88,7 +88,11 @@ io.on('connection', (socket) => {
     }) 
 
     socket.on('updatePlayer', ({ gameId, playerId, playerProp, playerValue }) => {
-        console.log('update player clicked!')
+        console.log('update player clicked!!')
+        if (!playerId) {
+          console.log('no player id!!')
+          return
+        }
         console.log('gameId', gameId)
         console.log('playerId', playerId)
         console.log('playerProp', playerProp)
