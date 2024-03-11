@@ -15,7 +15,6 @@ export class LobbyComponent implements OnInit {
   constructor(
     private router: Router,
     private socketService: SocketioService) {
-
   }
   isEmptyObject: Function = isEmptyObject
   rooms?: RoomsObjType 
@@ -28,7 +27,7 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    if (!localStorage['active-player'])
+    if (localStorage['active-player'])
       delete localStorage['active-player']
   }
   
