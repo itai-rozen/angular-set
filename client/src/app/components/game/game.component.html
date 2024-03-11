@@ -1,6 +1,9 @@
 <div class="game">
-  <h2 class="score">Sets Found: {{score}}</h2>
-  <h3>player id: {{activePlayerId}}</h3>
+  @if (isMultiplayer) {
+    <game-board [activePlayers]="game.activePlayers"></game-board>
+  } @else {
+    <h3>Sets Found: {{score}}</h3>
+  }
   <button (click)="onLeaveGame()">Leave</button>
   <div class="cards-container">
     @if (gameCards) {
