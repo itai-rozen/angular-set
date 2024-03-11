@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameObjType, PlayersObjType, RoomsObjType } from '../../types/types';
 import { SocketioService } from '../../services/socketio.service';
@@ -16,7 +16,9 @@ export class GamesRoomListComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private socketService: SocketioService  
-  ){}
+  ){
+    this.router = inject(Router)
+  }
 
   gameId: string = this.route.snapshot.paramMap.get('gameId') ?? ''
   game: any = {} 
