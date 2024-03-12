@@ -40,12 +40,13 @@ io.on('connection', (socket) => {
         const gameObj = rooms[gameId] || null
         const playerObj = gameObj?.activePlayers[playerId] || null
         console.log('game id @leaveGame: ', gameId)
+        console.log('player id @leaveGame: ', playerId)
         if (gameObj && playerObj)
-            delete playerObj
+         delete gameObj.activePlayers[playerId];
         if (playerObj && Object.keys(rooms[gameId]?.activePlayers)?.length === 0) // activeplayers prop is empty object = all players left the game
-            delete gameObj
+            delete rooms[gameId];
+        console.log('rooms after delete: ', rooms[gameId]?.activePlayers)
         socket.to(gameId).emit('leaveGame', 'a player left the game!')
-        // console.log('active players: ', rooms)
     }))
 
     socket.on('startGame', (({ gameId, cards }) => {
