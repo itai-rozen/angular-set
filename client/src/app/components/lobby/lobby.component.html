@@ -7,7 +7,7 @@
       @for (room of rooms|keyvalue; track rooms[room.key];) {
         <div class="room">
           <h2>Name: {{room.key}}</h2>
-          <h3>Active players: {{getNumOfPlayers(room.value.activePlayers) }}</h3>
+          <h3>Active players: {{getNumOfActivePlayers(room.value.activePlayers) }}</h3>
           <button (click)="onJoinRoom(room.key)">Join room</button>
         </div>
       }

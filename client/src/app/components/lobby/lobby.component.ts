@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PlayersObjType, RoomsObjType } from '../../types/types';
-import { isEmptyObject } from '../../services/utils.service';
+import { isEmptyObject, getNumOfActivePlayers } from '../../services/utils.service';
 import { Router } from '@angular/router';
 import { SocketioService } from '../../services/socketio.service';
 import { CommonModule } from '@angular/common';
@@ -16,26 +16,26 @@ export class LobbyComponent implements OnInit {
     private router: Router,
     private socketService: SocketioService) {
   }
-  isEmptyObject: Function = isEmptyObject
-  rooms?: RoomsObjType 
+  isEmptyObject: Function = isEmptyObject;
+  getNumOfActivePlayers: Function = getNumOfActivePlayers;
+  rooms?: RoomsObjType;
 
   ngOnInit(): void {
-    this.socketService.connect()
-    this.receiveRooms(true)
+    this.socketService.connect();
+    this.receiveRooms(true);
     if (!localStorage['active-player'])
-      localStorage['active-player'] = crypto.randomUUID()
+      localStorage['active-player'] = crypto.randomUUID();
   }
 
   ngOnDestroy(): void {
-    if (localStorage['active-player'])
-      delete localStorage['active-player']
+
   }
   
   ngOnChanges(): void {
   
   }
 
-  onLeaveLobby() {
+  onLeaveLobby(): void {
     this.ngOnDestroy()
     this.router.navigate([''])
   }
@@ -57,8 +57,4 @@ export class LobbyComponent implements OnInit {
     })
   }
 
-  getNumOfPlayers = (activePlayersObject: any): number|undefined => {
-    console.log('players object @getNumOfPlayers(): ', activePlayersObject)
-    return Object.keys(activePlayersObject)?.length
-  }
 }
