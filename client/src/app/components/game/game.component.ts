@@ -24,23 +24,26 @@ export class GameComponent {
     ) { }
 
     // @Input() mpCards?: Card[]
-    @Input() game?: any
+    @Input() game?: any;
 
-    isMultiplayer: boolean = !!this.game
-    mpCards: Card[] =  this.isMultiplayer ? this.game.cards : undefined
-    activePlayerId: string = localStorage['active-player']
-    navigateTo: Function = navigateTo
+    isMultiplayer: boolean = this.game ? true : false;
+    gameId: string = this.game?.id;
+    mpCards: Card[] =  this.isMultiplayer ? this.game.cards : undefined;
+    activePlayerId: string = localStorage['active-player'];
+    navigateTo: Function = navigateTo;
     numOfCards: number = 12;
     gameCards: Card[] = this.mpCards || shuffle(cards);
-    secsRemaining: number = 0
-    error: string = ''
-    score: number = this.isMultiplayer ? this.game.activePlayers[this.activePlayerId].sets : 0
+    secsRemaining: number = 0;
+    error: string = '';
+    score: number = this.isMultiplayer ? this.game.activePlayers[this.activePlayerId].sets : 0;
 
     ngOnChanges(changes: SimpleChanges) {
         console.log('changes \n ******************** \n\n', changes)
         if (changes['game']) {
             this.isMultiplayer = true
-            this.gameCards = changes['game'].currentValue.cards
+            this.gameCards = changes['game'].currentValue.cards;
+            console.log('game id: ', changes['game'].currentValue.id)
+            this.gameId = changes['game'].currentValue.id;
         }
         console.log('game cards: ', this.gameCards)
     }
@@ -54,7 +57,6 @@ export class GameComponent {
         console.log('multiplayer? ', this.isMultiplayer)
 
     }
-
 
     counter = (num: number) => new Array(num)
 
@@ -181,6 +183,11 @@ export class GameComponent {
     }
     //TODO merge with other onLeaveGame func for one util general func
     onLeaveGame = () => {
+      if (this.isMultiplayer) {
+        console.log('leaving the gamEEE')
+        this.socketService.leaveGame(this.game.id, this.activePlayerId);
+      }
+      console.log('multiplayer? : ', this.isMultiplayer)
       let path = this.isMultiplayer ? '/lobby' : '';
       this.router.navigate([path])
     } 
