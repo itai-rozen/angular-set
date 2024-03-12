@@ -4,7 +4,7 @@
       <game [game]="game"></game>
     } @else {
       <div>
-        <button (click)="onStartGame()">Start Game</button>
+        <button [disabled]="!this.game || getNumOfActivePlayers(this.game?.activePlayers) < 2" (click)="onStartGame()">Start Game</button>
         <button (click)="onLeaveGame()">Leave</button>
       </div>
     }
