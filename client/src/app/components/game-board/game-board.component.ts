@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { PlayersObjType } from '../../types/types';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 
 @Component({
   selector: 'game-board',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgFor],
   templateUrl: './game-board.component.html',
   styleUrl: './game-board.component.sass'
 })

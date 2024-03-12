@@ -1,6 +1,6 @@
 <div class="game-board-container">
-  <p *NgFor="let player in activePlayers|keyvalue">
-    {{player.key === activePlayerId ? 'You' : player.key}} : {{player.value.sets}}
+  <p *ngFor="let player of activePlayers|keyvalue">
+    {{player.key === activePlayerId ? 'You' : player.key}} : {{player.value?.sets}}
   </p>
 
 </div>
