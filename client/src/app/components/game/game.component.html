@@ -1,14 +1,18 @@
 <div class="game">
-  @if (isMultiplayer) {
-    <game-board [activePlayers]="game.activePlayers"></game-board>
-  } @else {
-    <h3>Sets Found: {{score}}</h3>
-  }
-  <button (click)="onLeaveGame()">Leave</button>
+  <div class="game-header">
+    @if (isMultiplayer) {
+      <game-board [activePlayers]="game.activePlayers"></game-board>
+    } @else {
+      <h3>Sets Found: {{score}}</h3>
+    }
+    <timer (secsRemainingEvent)="this.secsRemaining = $event;" [secsRemaining]="secsRemaining"></timer>
+    <button (click)="onLeaveGame()">Leave</button>
+    <button>Finish</button>
+  </div>
   <div class="cards-container">
     @if (gameCards) {
     <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card" (click)="onCardClick(gameCards[i].imgNumber)" [class]="gameCards[i]?.isClicked  ? 'highlight': ''">
-      @if (!gameCards[i]?.isMatched) {
+      @if (!gameCards[i].isMatched) {
         <card
         [card]="gameCards[i]"
         ></card>
@@ -18,11 +22,11 @@
     </div>
     }
   </div>
+
   <div class="btns-container">
     <button [disabled]="secsRemaining > 0" (click)="onSetClick()">SET</button>
     <button [disabled]="numOfCards > 12">Add 3 cards</button>
     <button (click)="onDoneClick()">DONE</button>
   </div>
   <div class="error">{{error}}</div>
-  <timer (secsRemainingEvent)="this.secsRemaining = $event;" [secsRemaining]="secsRemaining"></timer>
 </div>
