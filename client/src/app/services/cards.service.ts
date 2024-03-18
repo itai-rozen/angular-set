@@ -1,4 +1,4 @@
-import { Card, COLOR, SHAPE, FILL } from "./types/types"
+import { Card, COLOR, SHAPE, FILL } from "../types/types"
 
 const deck: number[] = [...new Array(81).keys()]
 
