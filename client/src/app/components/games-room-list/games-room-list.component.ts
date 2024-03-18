@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SocketioService } from '../../services/socketio.service';
 import { GameComponent } from '../game/game.component';
-import { cards, shuffle } from '../../cards.service';
+import { cards, shuffle } from '../../services/cards.service';
 import { getNumOfActivePlayers } from '../../services/utils.service';
 @Component({
   selector: 'games-room-list',
