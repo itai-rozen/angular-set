@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { CardComponent } from "../card/card.component";
 import { TimerComponent } from "../timer/timer.component";
-import { cards, shuffle } from "../../cards.service";
+import { cards, shuffle } from "../../services/cards.service";
 import { Card, PlayersObjType, RoomsObjType } from "../../types/types";
 import { NgFor } from "@angular/common";
 import { Router } from "@angular/router";
