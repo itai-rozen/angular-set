@@ -7,11 +7,11 @@
     }
     <timer (secsRemainingEvent)="this.secsRemaining = $event;" [secsRemaining]="secsRemaining"></timer>
     <button (click)="onLeaveGame()">Leave</button>
-    <button>Finish</button>
+    <button (click)="this.isClickedFinish = !this.isClickedFinish">Finish</button>
   </div>
   <div class="cards-container">
     @if (gameCards) {
-    <div *ngFor="let num of  counter(numOfCards); index as i" class="game-card" (click)="onCardClick(gameCards[i].imgNumber)" [class]="gameCards[i]?.isClicked  ? 'highlight': ''">
+    <div *ngFor="let num of counter(numOfCards); index as i" class="game-card" (click)="onCardClick(gameCards[i].imgNumber)" [class]="gameCards[i]?.isClicked  ? 'highlight': ''">
       @if (!gameCards[i].isMatched) {
         <card
         [card]="gameCards[i]"
@@ -29,4 +29,8 @@
     <button (click)="onDoneClick()">DONE</button>
   </div>
   <div class="error">{{error}}</div>
+  @if(isClickedFinish)  {
+    <finish-modal [(isClickedFinish)]="isClickedFinish"/>
+  } 
+  
 </div>
