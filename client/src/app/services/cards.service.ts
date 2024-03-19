@@ -54,11 +54,11 @@ export const getCardsFromImgNumbers = (imgNums : number[]) => {
 export const cards: Card[] = getCardsFromImgNumbers(deck)
 
 export const shuffle = (arr : Card[]):Card[] => {
-  for (let i = arr.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * i);
-    let temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+  const shuffledArray = [...arr]; 
+
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[randomIndex]] = [shuffledArray[randomIndex], shuffledArray[i]];
   }
-  return arr
+  return shuffledArray;
 }
