@@ -9,12 +9,12 @@ import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter} from 
 
 export class TimerComponent implements OnChanges {
   @Input() secsRemaining: number = 0;
-  @Output() secsRemainingEvent = new EventEmitter<number>;
+  @Output() secsRemainingChange = new EventEmitter<number>;
 
   intervalId: null|ReturnType<typeof setInterval> = null;
   startTimer() {
     this.intervalId =  setTimeout(() => {
-      this.secsRemainingEvent.emit(this.secsRemaining-1);
+      this.secsRemainingChange.emit(this.secsRemaining-1);
     },1000)
   }
   stopTimer = () => {

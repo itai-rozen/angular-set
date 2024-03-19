@@ -5,7 +5,7 @@
     } @else {
       <h3>Sets Found: {{score}}</h3>
     }
-    <timer (secsRemainingEvent)="this.secsRemaining = $event;" [secsRemaining]="secsRemaining"></timer>
+    <timer  [(secsRemaining)]="secsRemaining"></timer>
     <button (click)="onLeaveGame()">Leave</button>
     <button (click)="this.isClickedFinish = !this.isClickedFinish">Finish</button>
   </div>
